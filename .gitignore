@@ -32,7 +32,6 @@ platforms/
 
 
 # Private information
-knex-config.js
 public
 server/db/dev-support-assets
 versions

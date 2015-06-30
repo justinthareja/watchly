@@ -15,4 +15,4 @@ knex = require('knex')({
     connection: process.env.DATABASE_URL
   });
 }
-module.exports = knex;
+module.exports = knex; 
