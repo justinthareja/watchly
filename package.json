@@ -2,9 +2,13 @@
   "name": "watchly",
   "version": "0.1.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "bower install"
   },
   "description": "watchly: virtual townwatch",
+  "engines": {
+        "node": "~0.10.25"
+    },
   "dependencies": {
     "async": "^1.2.1",
     "bcrypt-nodejs": "~0.0.3",
