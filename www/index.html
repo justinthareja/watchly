@@ -17,6 +17,9 @@
     <!-- google maps api -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
     <!-- jquery -->
+
+    <!-- cordova photo helper -->
+<script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -27,7 +30,7 @@
   </head>
 
   <body ng-app="watchly" ng-controller="MapCtrl">
-    
+
     <ion-header-bar class="bar-calm">
       <h1 class="title"><img class="mainLogo" src="./img/watchlylogo.png"></h1>
       <a ng-click="centerMapOnUser()" class="button button-icon icon ion-pinpoint"></a>

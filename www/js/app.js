@@ -1,4 +1,4 @@
-angular.module('watchly', ['ionic', 'watchly.controllers'])
+angular.module('watchly', ['ionic', 'watchly.controllers', 'ngCordova'])
 
 .run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
