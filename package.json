@@ -2,7 +2,8 @@
   "name": "watchly",
   "version": "0.1.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "bower install"
   },
   "description": "watchly: virtual townwatch",
   "engines": {
