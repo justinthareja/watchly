@@ -5,7 +5,7 @@ knex = require('knex')({
   connection: {
     user: 'root',
     host: '127.0.0.1',
-    database: 'watchly',
+    database: 'heroku_ljl4455lkj',
     charset: 'utf8'
   }
 });
