@@ -5,7 +5,7 @@ knex = require('knex')({
   connection: {
     user: 'root',
     host: '127.0.0.1',
-    database: 'heroku_ljl4455lkj',
+    database: 'heroku_033c9dc05af850f',
     charset: 'utf8'
   }
 });
