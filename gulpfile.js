@@ -28,10 +28,10 @@ var libFilesToMove = [
   './bower_components/ionic/js/ionic-angular.min.js',
   './bower_components/ionic/js/ionic.bundle.min.js',
   './bower_components/ionicons/css/ionicons.min.css',
-  './bower_components/ngCordova/dist/ngCordova.js',
-  './bower_components/ngCordova/dist/ngCordova.min.js',
-  './bower_components/ngCordova/dist/ngCordova-mocks.js',
-  './bower_components/ngCordova/dist/ngCordova-mocks.min.js',
+  './bower_components/ngCordova/dist/ng-Cordova.js',
+  './bower_components/ngCordova/dist/ng-Cordova.min.js',
+  './bower_components/ngCordova/dist/ng-Cordova-mocks.js',
+  './bower_components/ngCordova/dist/ng-Cordova-mocks.min.js',
   './manifest.json'
 ];
 
