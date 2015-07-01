@@ -153,6 +153,35 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     }
   };
 
+  // template for the info window content
+  $scope.infoHtml = 
+      ' <div class="info-popup"> \
+        <span><strong><%= username %></strong> has spotted a <strong><%= type %></strong> at <strong><% fuzzyAddress.split(",")[0] %></strong></span> \
+        <div> \
+          <img class="pet" src="<%= url %>"/> \
+          <div class="sidebar"> \
+            <img class="arrow" id="up-arrow" src="img/arrow_up.png"> <br> \
+            <center id="popularity"><%= popularity %></center> \
+            <img class="arrow" id="down-arrow" src="img/arrow_down.png"> \
+          </div> \
+          <div class="description"> \
+            <p><i>"<%= description %>"</i> </p> \
+          </div> \
+        </div> \
+      </div> ';
+
+  $scope.testObj = {
+    username: 'justin',
+    type: 'cat',
+    fuzzyAddress: 'Mason & Market, San Francisco, CA 96102',
+    url: 'http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg',
+    popularity: 45,
+    votes: 100,
+    description: 'like omg this cat is super cute'
+  };
+
+  $scope.template = _.template($scope.infoHtml);
+
   $scope.infoWindows = [];
   // what does this incidentObj look like?
   $scope.renderIncident = function (incidentObj) {
@@ -167,23 +196,46 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // TODO:
     // this is the info window that pops up when each indicent is clicked, so really just need 
     // to update this html with a template that looks sweet
-    var incidentInfoWindowContent = '<div class="incidentInfoTitle"> <strong>' + incidentObj.type + '</strong> on ' + incidentObj.fuzzyAddress + ' </div>' +
-      '<div class="incidentInfoDescription"> '  + '</strong> </div>' +
-      '<div class="incidnetInfoUsername"> <strong>' + incidentObj.username + ': </strong> ' + incidentObj.description + " at " + incidentObj.occurred_at.slice(0, 10) + '  -  ' + incidentObj.occurred_at.slice(11, 19) + '</div>';
+    // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' + 
+    // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] + 
+    // '</strong></div> <img src="http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg" height="200px"/></div>'
 
     var incidentInfoWindow;
+    // update this to the incidentObj parameter to use incidents from DB
+    var incidentInfoWindowContent = $scope.template($scope.testObj);
 
     google.maps.event.addListener(incident, 'click', function () {
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
+      console.log('incident =', incident)
       incidentInfoWindow = new google.maps.InfoWindow({
         content: incidentInfoWindowContent
       });
+      google.maps.event.addListener(incidentInfoWindow, 'domready', function(){
+        // Add click even listeners here for interacting on elements within the info window
+        google.maps.event.addDomListener(document.getElementById('up-arrow'), 'click', $scope.upvote);
+        google.maps.event.addDomListener(document.getElementById('down-arrow'), 'click', $scope.downvote);
+
+      });
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
+
     });
   };
+  
+
+  
+  $scope.upvote = function (id, popCount, totalVotes) {
+    console.log('do upvote things here');
+  }
+  $scope.downvote = function() {
+    console.log('do downvote things here')
+  }
+
+
+
+
 
   $scope.populateIncidentTypes = function () {
     Incidents.getIncidentTypes().then(function (result) {
