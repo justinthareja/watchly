@@ -53,7 +53,7 @@ angular.module('watchly.Incidents', [])
         return res.data;
       });
   };
-
+  // What is this object gonna look like?
   var getAllIncidents = function () {
     return $http({
         method: 'GET',
@@ -63,6 +63,7 @@ angular.module('watchly.Incidents', [])
         if (res.status === 200) {} else {
           console.log(res.data.error);
         }
+        console.log('data returned from getAllIncidents:', res.data);
         return res.data;
       });
   };

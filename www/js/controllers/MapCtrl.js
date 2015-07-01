@@ -133,6 +133,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.getIncidents = function () {
+    
     Incidents.getAllIncidents().then(function (result) {
       result[0].forEach(function (incident) {
         $scope.incidents[incident.id] = incident;
@@ -142,6 +143,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.renderAllIncidents = function () {
+    // what does keys look like?
     var keys = Object.keys($scope.incidents);
     for (var i = 0; i < keys.length; i++) {
       if ($scope.renderedIncidents[keys[i]] === undefined) {
@@ -152,7 +154,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.infoWindows = [];
-
+  // what does this incidentObj look like?
   $scope.renderIncident = function (incidentObj) {
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -161,7 +163,10 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       map: $scope.map,
       icon: incidentIcon
     });
-
+    /**********HACK SOME PICS HERE****************/
+    // TODO:
+    // this is the info window that pops up when each indicent is clicked, so really just need 
+    // to update this html with a template that looks sweet
     var incidentInfoWindowContent = '<div class="incidentInfoTitle"> <strong>' + incidentObj.type + '</strong> on ' + incidentObj.fuzzyAddress + ' </div>' +
       '<div class="incidentInfoDescription"> '  + '</strong> </div>' +
       '<div class="incidnetInfoUsername"> <strong>' + incidentObj.username + ': </strong> ' + incidentObj.description + " at " + incidentObj.occurred_at.slice(0, 10) + '  -  ' + incidentObj.occurred_at.slice(11, 19) + '</div>';
