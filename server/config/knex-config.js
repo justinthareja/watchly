@@ -1,4 +1,6 @@
-var knex = require('knex')({
+var knex;
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined) {
+knex = require('knex')({
   client: 'mysql',
   connection: {
     user: 'root',
@@ -7,5 +9,10 @@ var knex = require('knex')({
     charset: 'utf8'
   }
 });
-
-module.exports = knex;
+} else if (process.env.NODE_ENV === 'production') {
+  knex = require('knex')({
+    client: 'mysql',
+    connection: process.env.DATABASE_URL
+  });
+}
+module.exports = knex; 
