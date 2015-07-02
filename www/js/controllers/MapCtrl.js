@@ -184,6 +184,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.template = _.template($scope.infoHtml);
   $scope.infoWindows = [];
   $scope.cache = {};
+
   $scope.renderIncident = function (incidentObj) {
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -203,13 +204,28 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     var hasVoted = false;
 
     google.maps.event.addListener(incident, 'click', function () {
-      
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
       incidentInfoWindow = new google.maps.InfoWindow({
         content: incidentInfoWindowContent
       });
+      google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
+        var pop = document.getElementById('popularity');
+        var numVotes = document.getElementById('votes');
+        // if there's something in the cache, a vote has already happened
+        // TODO: set proper % from cache
+        if ($scope.cache[incidentObj.id]) {
+          hasVoted = true;
+          cachedPop = $scope.cache[incidentObj.id].popularity;
+          cachedVotes = $scope.cache[incidentObj.id].votes;
+          cachedArrow = $scope.cache[incidentObj.id].hiddenArrow;
+
+          document.getElementById(cachedArrow).style.visibility = 'hidden';
+          pop.innerHTML = cachedPop;
+          document.getElementById('percentage').innerHTML = parseInt(((cachedVotes + cachedPop) / (2 * cachedVotes)) * 100);
+        }
+
 
       google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
         var pop = document.getElementById('popularity');
@@ -237,7 +253,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
           });
         } 
       });
-
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
     });
@@ -258,6 +273,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       votes: petObj.votes,
       hiddenArrow: 'down-arrow'
     }
+
   }
   $scope.downvote = function(petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
