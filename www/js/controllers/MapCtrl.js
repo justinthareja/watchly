@@ -226,25 +226,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
           document.getElementById('percentage').innerHTML = parseInt(((cachedVotes + cachedPop) / (2 * cachedVotes)) * 100);
         }
 
-
-      google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
-        var pop = document.getElementById('popularity');
-        var numVotes = document.getElementById('votes');
-        // if there's something in the cache, a vote has already happened
-        // TODO: set proper % from cache
-        if ($scope.cache[incidentObj.id]) {
-          hasVoted = true;
-          cachedPop = $scope.cache[incidentObj.id].popularity;
-          cachedVotes = $scope.cache[incidentObj.id].votes;
-          cachedArrow = $scope.cache[incidentObj.id].hiddenArrow;
-
-          document.getElementById(cachedArrow).style.visibility = 'hidden';
-          pop.innerHTML = cachedPop;
-          document.getElementById('percentage').innerHTML = parseInt(((cachedVotes + cachedPop) / (2 * cachedVotes)) * 100);
-        }
-
         if (!hasVoted) {
-
           google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'click', function () {
             $scope.upvote(incidentObj, pop, numVotes);
           });
@@ -290,7 +272,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       votes: petObj.votes,
       hiddenArrow: 'up-arrow'
     }
-
   }
 
 
