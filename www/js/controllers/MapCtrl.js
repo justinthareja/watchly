@@ -184,7 +184,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.template = _.template($scope.infoHtml);
   $scope.infoWindows = [];
   $scope.cache = {};
-
   $scope.renderIncident = function (incidentObj) {
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -204,12 +203,14 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     var hasVoted = false;
 
     google.maps.event.addListener(incident, 'click', function () {
+      
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
       incidentInfoWindow = new google.maps.InfoWindow({
         content: incidentInfoWindowContent
       });
+
       google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
         var pop = document.getElementById('popularity');
         var numVotes = document.getElementById('votes');
@@ -227,6 +228,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
         }
 
         if (!hasVoted) {
+
           google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'click', function () {
             $scope.upvote(incidentObj, pop, numVotes);
           });
@@ -235,6 +237,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
           });
         } 
       });
+
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
     });
@@ -255,7 +258,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       votes: petObj.votes,
       hiddenArrow: 'down-arrow'
     }
-
   }
   $scope.downvote = function(petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
@@ -272,6 +274,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       votes: petObj.votes,
       hiddenArrow: 'up-arrow'
     }
+
   }
 
 
