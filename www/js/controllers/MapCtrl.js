@@ -217,7 +217,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // create html for info window by passing in incident obj
     var incidentInfoWindowContent = $scope.template(incidentObj);
     
-    google.maps.event.addListener(incident, 'click', function () {
+    google.maps.event.addListener(incident, 'mousedown', function () {
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
@@ -234,10 +234,10 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
         }
 
         if (!hasVoted) {
-          google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'click', function () {
+          google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'mousedown', function () {
             $scope.upvote(incidentObj);
           });
-          google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'click', function () {
+          google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'mousedown', function () {
             $scope.downvote(incidentObj);
           });
         }
@@ -255,7 +255,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
     // render new message immediately on screen
     // cache the updated message
-
   };
 
   $scope.manipulateHtml = function (cachedObj) {
