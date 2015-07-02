@@ -194,9 +194,14 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       icon: incidentIcon
     });
     incidentObj.shortAddress = incidentObj.fuzzyAddress.split(",")[0];
-    incidentObj.percentageOfUpvotes = parseInt(((incidentObj.votes + incidentObj.popularity) / (2 * incidentObj.votes)) * 100);
-    // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' +
-    // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] +
+
+    if (incidentObj.votes === 0) {
+      incidentObj.percentageOfUpvotes = 0;
+    } else {
+      incidentObj.percentageOfUpvotes = parseInt(((incidentObj.votes + incidentObj.popularity) / (2 * incidentObj.votes)) * 100);
+    }
+    // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' + 
+    // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] + 
     // '</strong></div> <img src="http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg" height="200px"/></div>'
 
     var incidentInfoWindow;
@@ -213,9 +218,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       google.maps.event.addListener(incidentInfoWindow, 'domready', function () {
         var pop = document.getElementById('popularity');
         var numVotes = document.getElementById('votes');
-        // if there's something in the cache, a vote has already happened
-        // TODO: set proper % from cache
         if ($scope.cache[incidentObj.id]) {
+          // if there's something in the cache, a vote has already happened
           hasVoted = true;
           cachedPop = $scope.cache[incidentObj.id].popularity;
           cachedVotes = $scope.cache[incidentObj.id].votes;
