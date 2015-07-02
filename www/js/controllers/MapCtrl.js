@@ -158,7 +158,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       ' <div class="info-popup"> \
         <span><strong><%= username %></strong> has spotted a <strong><%= type %></strong> at <strong><% fuzzyAddress.split(",")[0] %></strong></span> \
         <div> \
-          <img class="pet" src="<%= url %>"/> \
+          <img class="pet" src="<%= imageURL %>"/> \
           <div class="sidebar"> \
             <img class="arrow" id="up-arrow" src="img/arrow_up.png"> <br> \
             <center id="popularity"><%= popularity %></center> \
@@ -192,30 +192,30 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
       map: $scope.map,
       icon: incidentIcon
     });
-    /**********HACK SOME PICS HERE****************/
-    // TODO:
-    // this is the info window that pops up when each indicent is clicked, so really just need 
-    // to update this html with a template that looks sweet
     // var incidentInfoWindowContent ='<div id="popup" class="info-popup"><div><strong>' + incidentObj.username +' </strong> has spotted a <strong>' + 
     // incidentObj.type + '!</strong> at <strong>' + incidentObj.fuzzyAddress.split(",")[0] + 
     // '</strong></div> <img src="http://colourfulrebel.com/en/wp-content/uploads/2015/06/Cute-Kittens-1-Wallpaper-HD.jpg" height="200px"/></div>'
 
     var incidentInfoWindow;
     // update this to the incidentObj parameter to use incidents from DB
-    var incidentInfoWindowContent = $scope.template($scope.testObj);
+    var incidentInfoWindowContent = $scope.template(incidentObj);
 
     google.maps.event.addListener(incident, 'click', function () {
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
-      console.log('incident =', incident)
       incidentInfoWindow = new google.maps.InfoWindow({
         content: incidentInfoWindowContent
       });
       google.maps.event.addListener(incidentInfoWindow, 'domready', function(){
-        // Add click even listeners here for interacting on elements within the info window
-        google.maps.event.addDomListener(document.getElementById('up-arrow'), 'click', $scope.upvote);
-        google.maps.event.addDomListener(document.getElementById('down-arrow'), 'click', $scope.downvote);
+        var pop = document.getElementById('popularity');
+        var numVotes = document.getElementById('votes');
+        google.maps.event.addDomListener(document.getElementById('up-arrow'), 'click', function () {
+          $scope.upvote(incidentObj, pop, numVotes);
+        });
+        google.maps.event.addDomListener(document.getElementById('down-arrow'), 'click', function () {
+          $scope.downvote(incidentObj, pop, numVotes);
+        });
 
       });
       $scope.infoWindows.push(incidentInfoWindow);
@@ -226,11 +226,23 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   
 
   
-  $scope.upvote = function (id, popCount, totalVotes) {
-    console.log('do upvote things here');
+  $scope.upvote = function (petObj, pop, numVotes) {
+    // update petObj and pass new values to DB through incidents factory
+    petObj.popularity++;
+    petObj.votes++;
+    Incidents.updatePopularity(petObj);
+    // render new pop immediately on the screen
+    pop.innerHTML++;
+    // TODO: DISABLE VOTING
   }
-  $scope.downvote = function() {
-    console.log('do downvote things here')
+  $scope.downvote = function(petObj, pop, numVotes) {
+    // update petObj and pass new values to DB through incidents factory
+    petObj.popularity--;
+    petObj.votes++;
+    Incidents.updatePopularity(petObj);
+    // render new pop immediately on the screen
+    pop.innerHTML--;
+    // TODO: DISABLE VOTING
   }
 
 
