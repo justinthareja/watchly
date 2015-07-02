@@ -32,8 +32,8 @@ var libFilesToMove = [
   './bower_components/ngCordova/dist/ng-Cordova.min.js',
   './bower_components/ngCordova/dist/ng-Cordova-mocks.js',
   './bower_components/ngCordova/dist/ng-Cordova-mocks.min.js',
-  './bower_components/underscore/underscore.min.js',
-  './bower_components/underscore/underscore.map.js',
+  './bower_components/underscore/underscore-min.js',
+  './bower_components/underscore/underscore-min.map',
   './manifest.json'
 ];
 
