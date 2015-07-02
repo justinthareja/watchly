@@ -183,6 +183,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.template = _.template($scope.infoHtml);
 
   $scope.infoWindows = [];
+  $scope.hiddenArrowMap = {};
   // what does this incidentObj look like?
   $scope.renderIncident = function (incidentObj) {
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
@@ -199,33 +200,43 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     var incidentInfoWindow;
     // update this to the incidentObj parameter to use incidents from DB
     var incidentInfoWindowContent = $scope.template(incidentObj);
-
+    var voted = false;
     google.maps.event.addListener(incident, 'click', function () {
+      
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
       incidentInfoWindow = new google.maps.InfoWindow({
         content: incidentInfoWindowContent
       });
-      google.maps.event.addListener(incidentInfoWindow, 'domready', function(){
-        var pop = document.getElementById('popularity');
-        var numVotes = document.getElementById('votes');
-        google.maps.event.addDomListener(document.getElementById('up-arrow'), 'click', function () {
-          $scope.upvote(incidentObj, pop, numVotes);
-        });
-        google.maps.event.addDomListener(document.getElementById('down-arrow'), 'click', function () {
-          $scope.downvote(incidentObj, pop, numVotes);
-        });
 
+      google.maps.event.addListener(incidentInfoWindow, 'domready', function() {
+        if (!voted) {
+          var pop = document.getElementById('popularity');
+          var numVotes = document.getElementById('votes');
+          google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'click', function () {
+            $scope.upvote(incidentObj, pop, numVotes);
+          });
+          google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'click', function () {
+            $scope.downvote(incidentObj, pop, numVotes);
+          });
+        }
+        voted = true;
+
+        if ($scope.hiddenArrowMap[incidentObj.id]) {
+          console.log(document.getElementById($scope.hiddenArrowMap[incidentObj.id]));
+          console.log(incidentObj.id);
+          console.log($scope.hiddenArrowMap)
+          document.getElementById($scope.hiddenArrowMap[incidentObj.id]).style.visibility = 'hidden'
+        }
       });
+
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
 
     });
   };
-  
 
-  
   $scope.upvote = function (petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
     petObj.popularity++;
@@ -234,6 +245,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // render new pop immediately on the screen
     pop.innerHTML++;
     // TODO: DISABLE VOTING
+    document.getElementById('down-arrow').style.visibility = 'hidden';
+    $scope.hiddenArrowMap[petObj.id] = 'down-arrow';
   }
   $scope.downvote = function(petObj, pop, numVotes) {
     // update petObj and pass new values to DB through incidents factory
@@ -243,6 +256,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // render new pop immediately on the screen
     pop.innerHTML--;
     // TODO: DISABLE VOTING
+    $scope.hiddenArrowMap[petObj.id] = 'up-arrow'
+    document.getElementById('up-arrow').style.visibility = 'hidden';
   }
 
 
