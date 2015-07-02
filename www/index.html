@@ -81,14 +81,14 @@
                 <button ng-click="uploadFile()">upload!</button>
             </div> -->
             <div>
-                <button class="button button-block button-calm" ngf-select ngf-keep="false" ngf-capture="'camera'" type="file" ng-model="files" ngf-accept="'image/*'">
+                <button class="button button-block button-calm" ngf-select ngf-capture="'camera'" type="file" ng-model="files" ngf-accept="'image/*'">
                     Upload an Image!
                 </button>
                 <img class="upload-preview" ngf-src="files[0]" ngf-accept="'image/*'">
             </div>
 
         </label>
-        <button ng-click="upload(files); submitIncident(newIncident);" class="button button-block button-calm">Submit Incident</button>
+        <button ng-click="submitIncident(newIncident);" class="button button-block button-calm">Submit Incident</button>
     </div>
     <ion-footer-bar class="bar-stable">
         <h4 class="title">Petly: Where the Cute Pets At?</h4>
