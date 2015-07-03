@@ -101,6 +101,7 @@ module.exports = {
 
   newIncident: function (req, res, next) {
     var userId = req.session.userId;
+    console.log(userId);
 
     if (userId) {
       req.body.userId = userId;
@@ -111,7 +112,7 @@ module.exports = {
       });
     }
     else {
-      res.status(401).send("Unknown user");
+      res.status(401).send("Error creating new pet, please refresh");
     }
   },
 
