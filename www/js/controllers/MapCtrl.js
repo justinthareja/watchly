@@ -420,6 +420,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
   };
 
+  // checks to see if the user is signed in the either opens the 
+  // incident report form or the signIn modal
   $scope.confirmIncidentCreate = function () {
     if (Auth.isAuthenticated()) {
       $scope.incidentReportForm.hidden = false;
@@ -602,10 +604,16 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     });
   };
 
+  // signin function called by the template
   $scope.signIn = function (user) {
-    Auth.signin(user).then(function (res) {
+    Auth.signin(user)
+    .then(function (res) {
       $scope.closeSignInModal();
-    });
+    })
+    .catch(function (err) {
+      console.log('error reported from signin:', err);
+      $scope.err = err.data;
+    })
   };
 
   $scope.signOut = function () {
@@ -615,7 +623,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.forgotPassword = function (email) {
-    Auth.forgotpassword(email).then(function (res) {
+    Auth.forgotpassword(email)
+    .then(function (res) {
       $scope.closeForgotPasswordModal();
     });
   };
