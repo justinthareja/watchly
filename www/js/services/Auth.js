@@ -10,13 +10,13 @@ angular.module('watchly.Auth', [])
       })
       .success(function (res) {
         // if (res.status === 200) {
-        //   authenticatedUser = res.data;
+        authenticatedUser = res;
         // } else {
         //   console.log(res.data.error);
         //   console.log(authenticatedUser);
         // }
         // return authenticatedUser;
-        return res.data;
+        return authenticatedUser;
       })
       .error(function (err) {
         console.log('error on post to api/users/signin', err);

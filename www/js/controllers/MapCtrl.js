@@ -518,6 +518,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   });
 
   $scope.profileActivate = function () {
+    debugger;
     if (Auth.isAuthenticated()) {
       $scope.user = Auth.getUser();
       $scope.profileModal.show();
@@ -565,9 +566,9 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     Auth.signin(user)
     .then(function (res) {
       $scope.closeSignInModal();
+      $scope.incidentReportForm.hidden = false;
     })
     .catch(function (err) {
-      console.log('error reported from signin:', err);
       $scope.err = err.data;
     })
   };
