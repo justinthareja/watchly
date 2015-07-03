@@ -202,15 +202,21 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   };
 
   $scope.getRandomIncidentIndex = function () {
-    var keys = Object.keys($scope.incidents);
-    var result = Math.floor(Math.random() * keys.length) + 1;
-    console.log(result);
-    console.log($scope.incidents[result].hasVoted);
-    if ($scope.incidents[result].hasVoted === true) {
-      return $scope.getRandomIncidentIndex;
-    } else {
-      return result;
+    var i = 0;
+    var recurse = function () {
+      var keys = Object.keys($scope.incidents);
+      var result = Math.ceil(Math.random() * keys.length);
+      console.log(result)
+      if ($scope.incidents[result] && !$scope.incidents[result].hasVoted) {
+        return result;
+      } else {
+        if (i < Object.keys($scope.incidents).length) {
+          i++;
+          return recurse();
+        }
+      }
     }
+    return recurse();
   }
 
   $scope.renderRandomIncident = function () {
@@ -218,6 +224,9 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   }
 
   $scope.renderIncident = function (incidentObj, callImmediately) {
+    if (!incidentObj) {
+      return;
+    }
     var incidentInfoWindow;
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
