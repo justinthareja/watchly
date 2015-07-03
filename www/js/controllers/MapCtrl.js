@@ -220,7 +220,10 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   }
 
   $scope.renderRandomIncident = function () {
-    $scope.renderIncident($scope.incidents[$scope.getRandomIncidentIndex()], true);
+    var idx = $scope.getRandomIncidentIndex();
+    if ($scope.incidents[idx]) {
+      $scope.renderIncident($scope.incidents[idx], true);
+    }
   }
 
   $scope.renderIncident = function (incidentObj, callImmediately) {
