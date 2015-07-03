@@ -200,7 +200,15 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     return parseInt(((votes + popularity) / (2 * votes)) * 100);
   };
 
-  $scope.renderIncident = function (incidentObj) {
+  $scope.getRandomIncidentIndex = function () {
+    var keys = Object.keys($scope.incidents);
+    var result = Math.floor(Math.random() * keys.length) + 1;
+    console.log(result);
+    return result;
+  }
+
+  $scope.renderIncident = function (incidentObj, callImmediately) {
+    console.log('incident: ', incidentObj);
     var hasVoted = false;
     var incidentInfoWindow;
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
@@ -217,7 +225,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     // create html for info window by passing in incident obj
     var incidentInfoWindowContent = $scope.template(incidentObj);
 
-    google.maps.event.addListener(incident, 'mousedown', function () {
+    var openIncidentWindow = function () {
+
       $scope.infoWindows.forEach(function (window) {
         window.close();
       });
@@ -242,12 +251,19 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
           });
         }
         // add event listener for submit click that grabs the message out of the text box and passes it to:
-          // $scope.submitMessage(incidentObj, message)
-          // also clear the current value in the input box
+        // $scope.submitMessage(incidentObj, message)
+        // also clear the current value in the input box
       });
       $scope.infoWindows.push(incidentInfoWindow);
       incidentInfoWindow.open($scope.map, incident);
-    });
+    };
+
+    if (callImmediately) {
+      openIncidentWindow()
+    } else {
+      google.maps.event.addListener(incident, 'mousedown', openIncidentWindow)
+    }
+
   };
 
   $scope.submitMessage = function (petObj, message) {
