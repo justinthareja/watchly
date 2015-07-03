@@ -276,9 +276,8 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
     if (callImmediately) {
       openIncidentWindow()
-    } else {
-      google.maps.event.addListener(incident, 'mousedown', openIncidentWindow)
     }
+    google.maps.event.addListener(incident, 'mousedown', openIncidentWindow)
 
   };
 
