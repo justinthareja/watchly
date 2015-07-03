@@ -136,6 +136,7 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
     Incidents.getAllIncidents().then(function (result) {
       result[0].forEach(function (incident) {
+        incident.hasVoted = false;
         $scope.incidents[incident.id] = incident;
       })
       $scope.renderAllIncidents();
@@ -204,12 +205,19 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
     var keys = Object.keys($scope.incidents);
     var result = Math.floor(Math.random() * keys.length) + 1;
     console.log(result);
-    return result;
+    console.log($scope.incidents[result].hasVoted);
+    if ($scope.incidents[result].hasVoted === true) {
+      return $scope.getRandomIncidentIndex;
+    } else {
+      return result;
+    }
+  }
+
+  $scope.renderRandomIncident = function () {
+    $scope.renderIncident($scope.incidents[$scope.getRandomIncidentIndex()], true);
   }
 
   $scope.renderIncident = function (incidentObj, callImmediately) {
-    console.log('incident: ', incidentObj);
-    var hasVoted = false;
     var incidentInfoWindow;
     var incidentPos = new google.maps.LatLng(incidentObj.latitude, incidentObj.longitude);
     var incidentIcon = "./img/" + incidentObj.iconFilename;
@@ -238,16 +246,24 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
 
         if (cachedObj) {
           // if there's something in the cache, a vote has already happened
-          hasVoted = true;
+          incidentObj.hasVoted = true;
           $scope.manipulateHtml(cachedObj);
         }
 
-        if (!hasVoted) {
+        if (!incidentObj.hasVoted) {
           google.maps.event.addDomListenerOnce(document.getElementById('up-arrow'), 'mousedown', function () {
             $scope.upvote(incidentObj);
+            incidentObj.hasVoted = true;
+            if (callImmediately) {
+              $scope.renderRandomIncident();
+            }
           });
           google.maps.event.addDomListenerOnce(document.getElementById('down-arrow'), 'mousedown', function () {
             $scope.downvote(incidentObj);
+            incidentObj.hasVoted = true;
+            if (callImmediately) {
+              $scope.renderRandomIncident();
+            }
           });
         }
         // add event listener for submit click that grabs the message out of the text box and passes it to:
