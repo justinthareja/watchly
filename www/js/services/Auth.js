@@ -19,7 +19,6 @@ angular.module('watchly.Auth', [])
         return authenticatedUser;
       })
       .error(function (err) {
-        console.log('error on post to api/users/signin', err);
         throw new Error(err);
       });
   };
