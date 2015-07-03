@@ -9,7 +9,7 @@ var types = [
   {
     'type': 'DogGreen',
     'iconFilename': 'doggreen.png'
-  }
+  },
   {
     'type': 'DogRed',
     'iconFilename': 'dogred.png'
@@ -93,5 +93,6 @@ var type;
 
 for(var i = 0; i < types.length; i++) {
   type = types[i];
+  console.log(type);
   createIncidentType(type.type, type.iconFilename);
 }
