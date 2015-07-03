@@ -368,7 +368,6 @@ angular.module('watchly.MapCtrl', ['watchly.Auth', 'watchly.Incidents', 'watchly
   $scope.newIncident.curDate = "";
   $scope.newIncident.curTime = "";
   $scope.newIncidentType;
-
   $scope.incidentReportForm = {
     hidden: true
   };
